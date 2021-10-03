@@ -2,8 +2,9 @@
 import tweepy as tw
 #libreria que se utilizara para recuperar la fecha actual
 from datetime import datetime
-#para manejo de archivos
+#libreria que se utiliza para dar el salto de linea al escribir en el archivo
 import os
+import re
 
 """
 **********************************************************************************************************
@@ -34,7 +35,6 @@ api = tw.API(auth, wait_on_rate_limit=True)
 
 
 """********************************PARÁMETROS DE BÚSQUEDA****************************"""
-
 #definimos la palabra y/o frase que vamos a buscar o una lista para iterar despues
 search_word = "Yolanda Park"
 #trae la fecha de hoy en formato de cadena
@@ -42,10 +42,9 @@ today = datetime.today().strftime('%Y-%m-%d')
 #asignamos la fecha de hoy para buscar los tweets más actuales siempre
 date_until = today
 #definimos el número máximo de tweets que vamos a buscar
-max_tweets = 10
+max_tweets = 100
 
 """******************************RECUPERACION DE TWEETS******************************"""
-
 tweets = tw.Cursor(
     api.search_tweets,
     #q, de query
@@ -61,10 +60,44 @@ fichero = open('conjunto_2.txt', 'w', encoding="utf-8")
 
 """*****************************ESCRIBIR EN EL FICHERO*******************************"""
 try:
+    #para cada uno de los tweets recuperados
     for tweet in tweets:
-        """**********************************PRUEBA**********************************"""
-        # print("Fecha de creacion del tweet: ", tweet.created_at, "Tweet: ", tweet.text)
+        #try:#es un ReTweet
+         #   fichero.write(tweet.retweeted_status.full_text + os.linesep)
+        #except:#no es un ReTweet
+         #   fichero.write(tweet.full_text + os.linesep)
+        if tweet.full_text.startswith('RT'):
+            continue
         fichero.write(tweet.full_text + os.linesep)
-finally:
+        #linea de separacion de tweets
+        fichero.write("-------------" + os.linesep)
+finally:#procedemos a cerrar el archivo
     fichero.close()
+
+
+"""*******************************PARAMETROS UTILIZADOS*******************************"""
+#declaramos un diccionario vacio que contendra las palabras mas comunes
+tendencias = {}
+#palabras excluidas
+palabras_excluidas = [
+    'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'del', 'lo', 'le', 'y',
+    'e', 'o', 'u', 'de', 'a', 'en', 'que', 'es', 'por', 'para', 'con', 'se', 'su', 'les',
+    'me', 'q', 'te', 'pero', 'mi', 'ya', 'cuando', 'como', 'estoy', 'voy', 'porque', 'he',
+    'son', 'solo', 'tengo', 'muy', 'no', 'ni', '-------------'
+]
+elementos_excluidos = [
+    "@", "http"
+]
+
+"""********************************LEER EL FICHERO***********************************"""
+#abrimos el fichero para leerlo
+fichero = open('conjunto_2.txt', 'r', encoding='utf-8')
+for linea in fichero:
+    palabras = linea.strip().lower().split()
+    for palabra in palabras:
+        if (palabra not in palabras_excluidas) and (palabra[0] != "@") and (palabra[0:4] != 'http'):
+            tendencias[palabra] = tendencias.get(palabra, 0) + 1
+
+for key in tendencias:
+    print(key, ": ", tendencias[key])
 
