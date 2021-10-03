@@ -4,7 +4,9 @@ import tweepy as tw
 from datetime import datetime
 #libreria que se utiliza para dar el salto de linea al escribir en el archivo
 import os
-import re
+#libreria de emojis
+import emoji
+
 
 """
 **********************************************************************************************************
@@ -95,7 +97,10 @@ fichero = open('conjunto_2.txt', 'r', encoding='utf-8')
 for linea in fichero:
     palabras = linea.strip().lower().split()
     for palabra in palabras:
-        if (palabra not in palabras_excluidas) and (palabra[0] != "@") and (palabra[0:4] != 'http'):
+        if (palabra not in palabras_excluidas) \
+        and (palabra[0] != "@") \
+        and (palabra[0:4] != 'http') \
+        and (palabra not in emoji.UNICODE_EMOJI_SPANISH):
             tendencias[palabra] = tendencias.get(palabra, 0) + 1
 
 for key in tendencias:

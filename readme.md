@@ -6,4 +6,9 @@
     pip install tweepy    
 ```
 
-- 
+- Instalar ***emoji*** mediante:
+
+```
+    pip install emoji
+```
+

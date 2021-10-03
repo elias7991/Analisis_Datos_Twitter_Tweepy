@@ -4,6 +4,8 @@ import tweepy as tw
 from datetime import datetime
 #libreria que se utiliza para dar el salto de linea al escribir en el archivo
 import os
+#libreria que contiene los emojis UNICODE
+import emoji
 
 """
 **********************************************************************************************************
@@ -30,9 +32,79 @@ auth.set_access_token(access_token, access_token_secret)
     con el argumento True de wait_on_rate_limit podemos hacer que nuestro programa espere a tener
     cupo de descarga nuevamente y que no termine de ejecutarse.
 """
-user = tw.Client(auth, wait_on_rate_limit=True)
+api = tw.API(auth, wait_on_rate_limit=True)
 
-tweets = user.search_all_tweets(query="q", max_results=10)
 
-for tweet in tweets:
-    print(tweet)
+"""********************************PARÁMETROS DE BÚSQUEDA****************************"""
+#definimos la palabra y/o frase que vamos a buscar o una lista para iterar despues
+"""*******************************ESTA MAL*************************************"""
+search_word = "*"
+"""****************************************************************************"""
+#trae la fecha de hoy en formato de cadena
+today = datetime.today().strftime('%Y-%m-%d')
+#asignamos la fecha de hoy para buscar los tweets más actuales siempre
+date_until = today
+#definimos el número máximo de tweets que vamos a buscar
+max_tweets = 100
+
+
+"""******************************RECUPERACION DE TWEETS******************************"""
+tweets = tw.Cursor(
+    api.search_tweets,
+    #q, de query
+    q=search_word,
+    lang="es",
+    until=date_until,
+    #para traer el tweet completo sin truncar en el caracter 140
+    tweet_mode="extended"
+).items(max_tweets)
+
+
+"""*************************PREPARAR EL FICHERO A UTILIZAR***************************"""
+fichero = open('conjunto_1.txt', 'w', encoding="utf-8")
+
+
+"""*****************************ESCRIBIR EN EL FICHERO*******************************"""
+try:
+    #para cada uno de los tweets recuperados
+    for tweet in tweets:
+        #try:#es un ReTweet
+         #   fichero.write(tweet.retweeted_status.full_text + os.linesep)
+        #except:#no es un ReTweet
+         #   fichero.write(tweet.full_text + os.linesep)
+        if tweet.full_text.startswith('RT'):
+            continue
+        fichero.write(tweet.full_text + os.linesep)
+        #linea de separacion de tweets
+        fichero.write("-------------" + os.linesep)
+finally:#procedemos a cerrar el archivo
+    fichero.close()
+
+
+"""*******************************PARAMETROS UTILIZADOS*******************************"""
+#declaramos un diccionario vacio que contendra las palabras mas comunes
+tendencias = {}
+#palabras excluidas
+palabras_excluidas = [
+    'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'del', 'lo', 'le', 'y',
+    'e', 'o', 'u', 'de', 'a', 'en', 'que', 'es', 'por', 'para', 'con', 'se', 'su', 'les',
+    'me', 'q', 'te', 'pero', 'mi', 'ya', 'cuando', 'como', 'estoy', 'voy', 'porque', 'he',
+    'son', 'solo', 'tengo', 'muy', 'no', 'ni', '-------------'
+]
+
+
+"""********************************LEER EL FICHERO***********************************"""
+#abrimos el fichero para leerlo
+fichero = open('conjunto_1.txt', 'r', encoding='utf-8')
+for linea in fichero:
+    palabras = linea.strip().lower().split()
+    for palabra in palabras:
+        if (palabra not in palabras_excluidas) \
+        and (palabra[0] != "@") \
+        and (palabra[0:4] != 'http') \
+        and (palabra not in emoji.UNICODE_EMOJI_SPANISH):
+            tendencias[palabra] = tendencias.get(palabra, 0) + 1
+
+for key in tendencias:
+    print(key, ": ", tendencias[key])
+
