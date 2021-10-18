@@ -38,7 +38,7 @@ today = datetime.today().strftime('%Y-%m-%d')
 # asignamos la fecha de hoy para buscar los tweets más actuales siempre
 date_until = today
 # definimos el número máximo de tweets que vamos a buscar
-max_tweets = 100
+max_tweets = 1000
 
 """
     **********************************************************************************
@@ -254,7 +254,7 @@ plot.show()
 # plot.savefig('histograma_1.png')
 
 
-"""***************************RECUPERAR INFORMACION DEL FICHERO 1*******************************"""
+"""***************************RECUPERAR INFORMACION DEL FICHERO 2*******************************"""
 try:
     # abrimos el fichero para leerlo
     fichero_tweets = open('conjunto_2.txt', 'r', encoding='utf-8')
