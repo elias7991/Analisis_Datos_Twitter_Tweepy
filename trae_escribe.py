@@ -12,7 +12,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # fecha de la semana pasada
 last_week = (datetime.datetime.today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
 # definimos el número máximo de tweets que vamos a buscar
-max_tweets = 20
+max_tweets = 1000
 
 """
     **********************************************************************************

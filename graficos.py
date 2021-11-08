@@ -186,26 +186,90 @@ else:
 
 """****************GRAFICO DEL ITEM 5****************"""
 """****************MOSTRAMOS EL HISTOGRAMA DE TWEETS POR FECHA****************"""
-grafico = pandas.DataFrame.from_dict(tweets_por_fecha, orient='index')
-grafico.plot(kind='bar')
-plot.title('Grafico item 5 - Numero de tweets por fecha')
-plot.show()
+if (len(tweets_por_fecha.keys()) <= 20):
+    grafico = pandas.DataFrame.from_dict(tweets_por_fecha, orient='index')
+    grafico.plot(kind='bar')
+    plot.title('Grafico item 5 - Numero de tweets por fecha')
+    plot.show()
+else:
+    # con esto ordenamos el diccionario por valor
+    mas_usadas = sorted(tweets_por_fecha, key=tweets_por_fecha.get, reverse=True)
+    top20 = []
+    top20_y = []
+    i = 0
+    while i < 20:
+        top20.append(mas_usadas[i])
+        top20_y.append(tweets_por_fecha[mas_usadas[i]])
+        i = i + 1
+    plot.bar(top20, top20_y)
+    # Legenda en el eje y
+    plot.ylabel('Numero de tweets')
+    # Legenda en el eje x
+    plot.xlabel('Fechas')
+    # Título de Gráfica
+    plot.title('Grafico item 5 - Numero de tweets por fecha')
+    plot.xticks(rotation=90)
+    ## Mostramos Gráfica
+    plot.show()
 
 
 """****************GRAFICO DEL ITEM 6****************"""
 """********MOSTRAMOS EL HISTOGRAMA DE USUARIOS QUE TWEETEARON POR DIA**********"""
-grafico = pandas.DataFrame.from_dict(usuarios_por_fecha, orient='index')
-grafico.plot(kind='bar')
-plot.title('Grafico item 6 - Usuarios que tweetearon por fecha')
-plot.show()
+if (len(usuarios_por_fecha.keys()) <= 20):
+    grafico = pandas.DataFrame.from_dict(usuarios_por_fecha, orient='index')
+    grafico.plot(kind='bar')
+    plot.title('Grafico item 6 - Usuarios que twittearon por fecha')
+    plot.show()
+else:
+    # con esto ordenamos el diccionario por valor
+    mas_usadas = sorted(usuarios_por_fecha, key=usuarios_por_fecha.get, reverse=True)
+    top20 = []
+    top20_y = []
+    i = 0
+    while i < 20:
+        top20.append(mas_usadas[i])
+        top20_y.append(usuarios_por_fecha[mas_usadas[i]])
+        i = i + 1
+    plot.bar(top20, top20_y)
+    # Legenda en el eje y
+    plot.ylabel('Numero de usuarios')
+    # Legenda en el eje x
+    plot.xlabel('Fechas')
+    # Título de Gráfica
+    plot.title('Grafico item 6 - Usuarios que twittearon por fecha')
+    plot.xticks(rotation=90)
+    ## Mostramos Gráfica
+    plot.show()
 
 
 """****************GRAFICO DEL ITEM 7****************"""
 """****************MOSTRAMOS EL HISTOGRAMA DE TWEETS POR USUARIO****************"""
-grafico = pandas.DataFrame.from_dict(tweets_por_usuario, orient='index')
-grafico.plot(kind='bar')
-plot.title('Grafico item 7 - Numero de tweets por usuario')
-plot.show()
+if (len(tweets_por_usuario.keys()) <= 20):
+    grafico = pandas.DataFrame.from_dict(tweets_por_usuario, orient='index')
+    grafico.plot(kind='bar')
+    plot.title('Grafico item 7 - Numero de tweets por usuario')
+    plot.show()
+else:
+    # con esto ordenamos el diccionario por valor
+    mas_usadas = sorted(tweets_por_usuario, key=tweets_por_usuario.get, reverse=True)
+    top20 = []
+    top20_y = []
+    i = 0
+    while i < 20:
+        top20.append(mas_usadas[i])
+        top20_y.append(tweets_por_usuario[mas_usadas[i]])
+        i = i + 1
+    plot.bar(top20, top20_y)
+    # Legenda en el eje y
+    plot.ylabel('Numero de tweets')
+    # Legenda en el eje x
+    plot.xlabel('Usuarios')
+    # Título de Gráfica
+    plot.title('Grafico item 7 - Numero de tweets por usuario')
+    plot.xticks(rotation=90)
+    ## Mostramos Gráfica
+    plot.show()
+
 
 """****************GRAFICO DEL ITEM 8****************"""
 """****************MOSTRAMOS EL HISTOGRAMA DE PALABRAS UNICAS POR CONJUNTO****************"""
